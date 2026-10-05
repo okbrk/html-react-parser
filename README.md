@@ -1,13 +1,13 @@
 # html-react-parser
 
-[![NPM](https://nodei.co/npm/html-react-parser.svg)](https://b.remarkabl.org/html-react-parser)
+[![NPM](https://nodei.co/npm/html-react-parser.png)](https://nodei.co/npm/html-react-parser/)
 
-[![NPM version](https://img.shields.io/npm/v/html-react-parser)](https://b.remarkabl.org/html-react-parser)
-[![NPM bundle size](https://img.shields.io/bundlephobia/minzip/html-react-parser)](https://bundlephobia.com/package/html-react-parser)
-[![build](https://github.com/remarkablemark/html-react-parser/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablemark/html-react-parser/actions/workflows/build.yml)
+[![NPM version](https://img.shields.io/npm/v/html-react-parser.svg)](https://www.npmjs.com/package/html-react-parser)
+[![Bundlephobia minified + gzip](https://img.shields.io/bundlephobia/minzip/html-react-parser)](https://bundlephobia.com/package/html-react-parser)
+[![Build Status](https://github.com/remarkablemark/html-react-parser/workflows/build/badge.svg?branch=master)](https://github.com/remarkablemark/html-react-parser/actions?query=workflow%3Abuild)
 [![codecov](https://codecov.io/gh/remarkablemark/html-react-parser/branch/master/graph/badge.svg?token=wosFd1DBIR)](https://codecov.io/gh/remarkablemark/html-react-parser)
-[![NPM downloads](https://img.shields.io/npm/dm/html-react-parser)](https://b.remarkabl.org/html-react-parser)
-[![Discord](https://img.shields.io/discord/422421589582282752?logo=discord&logoColor=white&color=%237289da&cacheSeconds=300)](https://b.remarkabl.org/discord)
+[![NPM downloads](https://img.shields.io/npm/dm/html-react-parser.svg?style=flat-square)](https://www.npmjs.com/package/html-react-parser)
+[![Discord](https://img.shields.io/discord/422421589582282752.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/njExwXdrRJ)
 
 HTML to React parser that works on both the server (Node.js) and the client (browser):
 
@@ -15,19 +15,18 @@ HTML to React parser that works on both the server (Node.js) and the client (bro
 HTMLReactParser(string[, options])
 ```
 
-The parser converts an HTML string to one or more [React elements](https://react.dev/reference/react/createElement).
+The parser converts an HTML string to one or more [React elements](https://reactjs.org/docs/react-api.html#creating-react-elements).
 
 To replace an element with another element, check out the [`replace`](#replace) option.
 
 #### Example
 
-```ts
-import parse from 'html-react-parser';
-
+```js
+const parse = require('html-react-parser');
 parse('<p>Hello, World!</p>'); // React.createElement('p', {}, 'Hello, World!')
 ```
 
-[StackBlitz](https://stackblitz.com/edit/html-react-parser) | [TypeScript](https://stackblitz.com/edit/html-react-parser-typescript) | [JSFiddle](https://jsfiddle.net/remarkablemark/7v86d800/) | [Examples](https://github.com/remarkablemark/html-react-parser/tree/master/examples)
+[Replit](https://replit.com/@remarkablemark/html-react-parser) | [JSFiddle](https://jsfiddle.net/remarkablemark/7v86d800/) | [CodeSandbox](https://codesandbox.io/s/940pov1l4w) | [TypeScript](https://codesandbox.io/s/html-react-parser-z0kp6) | [Examples](https://github.com/remarkablemark/html-react-parser/tree/master/examples)
 
 <details>
 <summary>Table of Contents</summary>
@@ -39,17 +38,13 @@ parse('<p>Hello, World!</p>'); // React.createElement('p', {}, 'Hello, World!')
     - [replace element and children](#replace-element-and-children)
     - [replace element attributes](#replace-element-attributes)
     - [replace and remove element](#replace-and-remove-element)
-  - [transform](#transform)
   - [library](#library)
   - [htmlparser2](#htmlparser2)
   - [trim](#trim)
-  - [trustedTypePolicy](#trustedtypepolicy)
 - [Migration](#migration)
-  - [v5](#v5)
-  - [v4](#v4)
-  - [v3](#v3)
-  - [v2](#v2)
-  - [v1](#v1)
+  - [v3.0.0](#v300)
+  - [v2.0.0](#v200)
+  - [v1.0.0](#v100)
 - [FAQ](#faq)
   - [Is this XSS safe?](#is-this-xss-safe)
   - [Does invalid HTML get sanitized?](#does-invalid-html-get-sanitized)
@@ -69,6 +64,7 @@ parse('<p>Hello, World!</p>'); // React.createElement('p', {}, 'Hello, World!')
   - [Financial Contributors](#financial-contributors)
     - [Individuals](#individuals)
     - [Organizations](#organizations)
+- [Enterprise](#enterprise)
 - [Support](#support)
 - [License](#license)
 
@@ -101,33 +97,31 @@ yarn add html-react-parser
 
 ## Usage
 
-Import ES module:
+Import or require the module:
 
-```ts
+```js
+// ES Modules
 import parse from 'html-react-parser';
-```
 
-Or require CommonJS module:
-
-```ts
-const parse = require('html-react-parser').default;
+// CommonJS
+const parse = require('html-react-parser');
 ```
 
 Parse single element:
 
-```ts
+```js
 parse('<h1>single</h1>');
 ```
 
 Parse multiple elements:
 
-```ts
+```js
 parse('<li>Item 1</li><li>Item 2</li>');
 ```
 
 Make sure to render parsed adjacent elements under a parent element:
 
-```tsx
+```jsx
 <ul>
   {parse(`
     <li>Item 1</li>
@@ -138,15 +132,15 @@ Make sure to render parsed adjacent elements under a parent element:
 
 Parse nested elements:
 
-```ts
+```js
 parse('<body><p>Lorem ipsum</p></body>');
 ```
 
 Parse element with attributes:
 
-```ts
+```js
 parse(
-  '<hr id="foo" class="bar" data-attr="baz" custom="qux" style="top:42px;">',
+  '<hr id="foo" class="bar" data-attr="baz" custom="qux" style="top:42px;">'
 );
 ```
 
@@ -156,19 +150,17 @@ The `replace` option allows you to replace an element with another element.
 
 The `replace` callback's first argument is [domhandler](https://github.com/fb55/domhandler#example)'s node:
 
-```ts
+```js
 parse('<br>', {
-  replace(domNode) {
+  replace: domNode => {
     console.dir(domNode, { depth: null });
-  },
+  }
 });
 ```
 
-<details>
-<summary>Console output</summary>
-<p>
+Console output:
 
-```ts
+```js
 Element {
   type: 'tag',
   parent: null,
@@ -182,72 +174,41 @@ Element {
 }
 ```
 
-</p>
-</details>
-
 The element is replaced if a **valid** React element is returned:
 
-```tsx
+```jsx
 parse('<p id="replace">text</p>', {
-  replace(domNode) {
+  replace: domNode => {
     if (domNode.attribs && domNode.attribs.id === 'replace') {
       return <span>replaced</span>;
     }
-  },
+  }
 });
 ```
-
-The second argument is the index:
-
-```ts
-parse('<br>', {
-  replace(domNode, index) {
-    console.assert(typeof index === 'number');
-  },
-});
-```
-
-> [!NOTE]
->
-> The index will restart at 0 when traversing the node's children so don't rely on index being a unique key (see [#1259](https://github.com/remarkablemark/html-react-parser/issues/1259#issuecomment-1889574133)).
 
 #### replace with TypeScript
 
-You need to check that `domNode` is an instance of domhandler's `Element`:
+For TypeScript projects, you may need to check that `domNode` is an instance of domhandler's `Element`:
 
 ```tsx
 import { HTMLReactParserOptions, Element } from 'html-react-parser';
 
 const options: HTMLReactParserOptions = {
-  replace(domNode) {
+  replace: domNode => {
     if (domNode instanceof Element && domNode.attribs) {
       // ...
     }
-  },
+  }
 };
 ```
 
-Or use a type assertion:
-
-```tsx
-import { HTMLReactParserOptions, Element } from 'html-react-parser';
-
-const options: HTMLReactParserOptions = {
-  replace(domNode) {
-    if ((domNode as Element).attribs) {
-      // ...
-    }
-  },
-};
-```
-
-If you're having issues, take a look at our [Create React App example](./examples/create-react-app-typescript/src/App.tsx).
+If you're having issues take a look at our [Create React App example](./examples/create-react-app-typescript/src/App.tsx).
 
 #### replace element and children
 
-Replace the element and its children:
+Replace the element and its children (see [demo](https://replit.com/@remarkablemark/html-react-parser-replace-example)):
 
-```tsx
+```jsx
 import parse, { domToReact } from 'html-react-parser';
 
 const html = `
@@ -259,7 +220,7 @@ const html = `
 `;
 
 const options = {
-  replace({ attribs, children }) {
+  replace: ({ attribs, children }) => {
     if (!attribs) {
       return;
     }
@@ -275,15 +236,13 @@ const options = {
         </span>
       );
     }
-  },
+  }
 };
 
 parse(html, options);
 ```
 
-<details>
-<summary>HTML output</summary>
-<p>
+HTML output:
 
 <!-- prettier-ignore-start -->
 
@@ -297,14 +256,11 @@ parse(html, options);
 
 <!-- prettier-ignore-end -->
 
-</p>
-</details>
-
 #### replace element attributes
 
 Convert DOM attributes to React props with `attributesToProps`:
 
-```tsx
+```jsx
 import parse, { attributesToProps } from 'html-react-parser';
 
 const html = `
@@ -312,62 +268,37 @@ const html = `
 `;
 
 const options = {
-  replace(domNode) {
+  replace: domNode => {
     if (domNode.attribs && domNode.name === 'main') {
       const props = attributesToProps(domNode.attribs);
       return <div {...props} />;
     }
-  },
+  }
 };
 
 parse(html, options);
 ```
 
-<details>
-<summary>HTML output</summary>
-<p>
+HTML output:
 
 ```html
 <div class="prettify" style="background:#fff;text-align:center"></div>
 ```
 
-</p>
-</details>
-
 #### replace and remove element
 
-Exclude an element from rendering by replacing it with `<React.Fragment>`:
+[Exclude](https://replit.com/@remarkablemark/html-react-parser-56) an element from rendering by replacing it with `<React.Fragment>`:
 
-```tsx
+```jsx
 parse('<p><br id="remove"></p>', {
-  replace: ({ attribs }) => attribs?.id === 'remove' && <></>,
+  replace: ({ attribs }) => attribs && attribs.id === 'remove' && <></>
 });
 ```
 
-<details>
-<summary>HTML output</summary>
-<p>
+HTML output:
 
 ```html
 <p></p>
-```
-
-</p>
-</details>
-
-### transform
-
-The `transform` option allows you to transform each element individually after it's parsed.
-
-The `transform` callback's first argument is the React element:
-
-```tsx
-parse('<br>', {
-  transform(reactNode, domNode, index) {
-    // this will wrap every element in a div
-    return <div>{reactNode}</div>;
-  },
-});
 ```
 
 ### library
@@ -376,15 +307,15 @@ The `library` option specifies the UI library. The default library is **React**.
 
 To use Preact:
 
-```ts
+```js
 parse('<br>', {
-  library: require('preact'),
+  library: require('preact')
 });
 ```
 
 Or a custom library:
 
-```ts
+```js
 parse('<br>', {
   library: {
     cloneElement: () => {
@@ -395,26 +326,24 @@ parse('<br>', {
     },
     isValidElement: () => {
       /* ... */
-    },
-  },
+    }
+  }
 });
 ```
 
 ### htmlparser2
 
-> [!WARNING]
->
-> `htmlparser2` options _**do not work** on the client-side_ (browser); they _**only work** on the server-side_ (Node.js). By overriding the options, it can break universal rendering.
+> **Warning**: `htmlparser2` options _**do not** work on the client-side_ (browser) and the options _**only work** on the server-side_ (Node.js). By overriding the options, it could cause universal rendering to break.
 
 Default [htmlparser2 options](https://github.com/fb55/htmlparser2/wiki/Parser-options#option-xmlmode) can be overridden in >=[0.12.0](https://github.com/remarkablemark/html-react-parser/tree/v0.12.0).
 
 To enable [`xmlMode`](https://github.com/fb55/htmlparser2/wiki/Parser-options#option-xmlmode):
 
-```ts
+```js
 parse('<p /><p />', {
   htmlparser2: {
-    xmlMode: true,
-  },
+    xmlMode: true
+  }
 });
 ```
 
@@ -422,88 +351,41 @@ parse('<p /><p />', {
 
 By default, whitespace is preserved:
 
-```ts
+```js
 parse('<br>\n'); // [React.createElement('br'), '\n']
 ```
 
 But certain elements like `<table>` will strip out invalid whitespace:
 
-```ts
+```js
 parse('<table>\n</table>'); // React.createElement('table')
 ```
 
 To remove whitespace, enable the `trim` option:
 
-```ts
+```js
 parse('<br>\n', { trim: true }); // React.createElement('br')
 ```
 
 However, intentional whitespace may be stripped out:
 
-```ts
+```js
 parse('<p> </p>', { trim: true }); // React.createElement('p')
-```
-
-### trustedTypePolicy
-
-When running in a browser, you can pass a [Trusted Types](https://developer.mozilla.org/docs/Web/API/Trusted_Types_API) policy so the parser calls `trustedTypePolicy.createHTML` before assigning content to `innerHTML`:
-
-```ts
-parse('<div>Hello</div>', {
-  trustedTypePolicy: window.trustedTypes?.createPolicy('my-policy', {
-    createHTML(input) {
-      // apply sanitization logic here
-      return DOMPurify.sanitize(input);
-    },
-  }),
-});
 ```
 
 ## Migration
 
-### v6
-
-Changed build target from `es5` to `es2016`.
-
-[html-dom-parser](https://github.com/remarkablemark/html-dom-parser) has been upgraded to [v7](https://github.com/remarkablemark/html-dom-parser/releases/tag/v7.0.0) and [domhandler](https://github.com/fb55/domhandler) has been upgraded to [v6](https://github.com/fb55/domhandler/releases/tag/v6.0.1).
-
-### v5
-
-Migrated to TypeScript. CommonJS imports require the `.default` key:
-
-```ts
-const parse = require('html-react-parser').default;
-```
-
-If you're getting the error:
-
-```
-Argument of type 'ChildNode[]' is not assignable to parameter of type 'DOMNode[]'.
-```
-
-Then use type assertion:
-
-```ts
-domToReact(domNode.children as DOMNode[], options);
-```
-
-See [#1126](https://github.com/remarkablemark/html-react-parser/issues/1126#issuecomment-1784188447).
-
-### v4
-
-[htmlparser2](https://github.com/fb55/htmlparser2) has been upgraded to [v9](https://github.com/fb55/htmlparser2/releases/tag/v9.0.0).
-
-### v3
+### v3.0.0
 
 [domhandler](https://github.com/fb55/domhandler) has been upgraded to v5 so some [parser options](https://github.com/fb55/htmlparser2/wiki/Parser-options) like `normalizeWhitespace` have been removed.
 
-Also, it's recommended to upgrade to the latest version of [TypeScript](https://www.npmjs.com/package/typescript).
+Also, it's recommended to upgrade to the latest version of [typescript](https://www.npmjs.com/package/typescript).
 
-### v2
+### v2.0.0
 
 Since [v2.0.0](https://github.com/remarkablemark/html-react-parser/releases/tag/v2.0.0), Internet Explorer (IE) is no longer supported.
 
-### v1
+### v1.0.0
 
 TypeScript projects will need to update the types in [v1.0.0](https://github.com/remarkablemark/html-react-parser/releases/tag/v1.0.0).
 
@@ -513,11 +395,11 @@ For the `replace` option, you may need to do the following:
 import { Element } from 'domhandler/lib/node';
 
 parse('<br class="remove">', {
-  replace(domNode) {
+  replace: domNode => {
     if (domNode instanceof Element && domNode.attribs.class === 'remove') {
       return <></>;
     }
-  },
+  }
 });
 ```
 
@@ -527,27 +409,27 @@ Since [v1.1.1](https://github.com/remarkablemark/html-react-parser/releases/tag/
 
 ### Is this XSS safe?
 
-No, this library is **not** [XSS (cross-site scripting)](https://wikipedia.org/wiki/Cross-site_scripting) safe (see [#94](https://github.com/remarkablemark/html-react-parser/issues/94)). However, you can mitigate this risk by enforcing a Content Security Policy (CSP) with [Trusted Types](#trustedtypepolicy).
+No, this library is _**not**_ [XSS (cross-site scripting)](https://wikipedia.org/wiki/Cross-site_scripting) safe. See [#94](https://github.com/remarkablemark/html-react-parser/issues/94).
 
 ### Does invalid HTML get sanitized?
 
-No, this library does **not** sanitize HTML (see [#124](https://github.com/remarkablemark/html-react-parser/issues/124), [#125](https://github.com/remarkablemark/html-react-parser/issues/125), and [#141](https://github.com/remarkablemark/html-react-parser/issues/141)).
+No, this library does _**not**_ sanitize HTML. See [#124](https://github.com/remarkablemark/html-react-parser/issues/124), [#125](https://github.com/remarkablemark/html-react-parser/issues/125), and [#141](https://github.com/remarkablemark/html-react-parser/issues/141).
 
 ### Are `<script>` tags parsed?
 
-Although `<script>` tags and their contents are rendered on the server-side, they're not evaluated on the client-side (see [#98](https://github.com/remarkablemark/html-react-parser/issues/98)).
+Although `<script>` tags and their contents are rendered on the server-side, they're not evaluated on the client-side. See [#98](https://github.com/remarkablemark/html-react-parser/issues/98).
 
 ### Attributes aren't getting called
 
-The reason why your HTML attributes aren't getting called is because [inline event handlers](https://developer.mozilla.org/docs/Web/Guide/Events/Event_handlers) (e.g., `onclick`) are parsed as a _string_ rather than a _function_ (see [#73](https://github.com/remarkablemark/html-react-parser/issues/73)).
+The reason why your HTML attributes aren't getting called is because [inline event handlers](https://developer.mozilla.org/docs/Web/Guide/Events/Event_handlers) (e.g., `onclick`) are parsed as a _string_ rather than a _function_. See [#73](https://github.com/remarkablemark/html-react-parser/issues/73).
 
 ### Parser throws an error
 
-If the parser throws an error, check if your arguments are valid (see ["Does invalid HTML get sanitized?"](#does-invalid-html-get-sanitized)).
+If the parser throws an erorr, check if your arguments are valid. See ["Does invalid HTML get sanitized?"](#does-invalid-html-get-sanitized).
 
 ### Is SSR supported?
 
-Yes, server-side rendering on Node.js is supported by this library:
+Yes, server-side rendering on Node.js is supported by this library. See [demo](https://replit.com/@remarkablemark/html-react-parser-SSR).
 
 ### Elements aren't nested correctly
 
@@ -566,29 +448,27 @@ Tags are lowercased by default. To prevent that from happening, pass the [htmlpa
 ```js
 const options = {
   htmlparser2: {
-    lowerCaseTags: false,
-  },
+    lowerCaseTags: false
+  }
 };
 parse('<CustomElement>', options); // React.createElement('CustomElement')
 ```
 
-> [!WARNING]
->
-> By preserving case-sensitivity of the tags, you may get rendering warnings like:
+> **Warning**: By preserving case-sensitivity of the tags, you may get rendering warnings like:
 >
 > ```
 > Warning: <CustomElement> is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.
 > ```
 
-See [#62](https://github.com/remarkablemark/html-react-parser/issues/62).
+See [#62](https://github.com/remarkablemark/html-react-parser/issues/62) and [example](https://replit.com/@remarkablemark/html-react-parser-62).
 
 ### TS Error: Property 'attribs' does not exist on type 'DOMNode'
 
-The TypeScript error occurs because `DOMNode` needs to be an instance of domhandler's `Element` (see [migration](#migration) or [#199](https://github.com/remarkablemark/html-react-parser/issues/199)).
+The TypeScript error occurs because `DOMNode` needs be an instance of domhandler's `Element`. See [migration](#migration) or [#199](https://github.com/remarkablemark/html-react-parser/issues/199).
 
 ### Can I enable `trim` for certain elements?
 
-Yes, you can enable or disable [`trim`](#trim) for certain elements using the [`replace`](#replace) option (see [#205](https://github.com/remarkablemark/html-react-parser/issues/205)).
+Yes, you can enable or disable [`trim`](#trim) for certain elements using the [`replace`](#replace) option. See [#205](https://github.com/remarkablemark/html-react-parser/issues/205).
 
 ### Webpack build warnings
 
@@ -605,8 +485,8 @@ Then update your Webpack config to:
 module.exports = {
   // ...
   resolve: {
-    mainFields: ['browser', 'main', 'module'],
-  },
+    mainFields: ['browser', 'main', 'module']
+  }
 };
 ```
 
@@ -620,25 +500,25 @@ If you see the TypeScript error:
 node_modules/htmlparser2/lib/index.d.ts:2:23 - error TS1005: ',' expected.
 
 2 export { Parser, type ParserOptions };
-                        ~~~~~~~~~~~~~
+                         ~~~~~~~~~~~~~
 ```
 
-Then upgrade to the latest version of [typescript](https://www.npmjs.com/package/typescript) (see [#748](https://github.com/remarkablemark/html-react-parser/issues/748)).
+Then upgrade to the latest version of [typescript](https://www.npmjs.com/package/typescript). See [#748](https://github.com/remarkablemark/html-react-parser/issues/748).
 
 ## Performance
 
 Run benchmark:
 
 ```sh
-npm run benchmark
+npm run test:benchmark
 ```
 
-Output of benchmark run on MacBook Pro 2024:
+Output of benchmark run on MacBook Pro 2017:
 
 ```
-html-to-react - Single x 1,270,990 ops/sec ±0.21% (100 runs sampled)
-html-to-react - Multiple x 522,472 ops/sec ±0.64% (94 runs sampled)
-html-to-react - Complex x 54,028 ops/sec ±0.82% (98 runs sampled)
+html-to-react - Single x 415,186 ops/sec ±0.92% (85 runs sampled)
+html-to-react - Multiple x 139,780 ops/sec ±2.32% (87 runs sampled)
+html-to-react - Complex x 8,118 ops/sec ±2.99% (82 runs sampled)
 ```
 
 Run [Size Limit](https://github.com/ai/size-limit):
@@ -653,7 +533,7 @@ npx size-limit
 
 This project exists thanks to all the people who contribute. [[Contribute](https://github.com/remarkablemark/html-react-parser/blob/master/.github/CONTRIBUTING.md)].
 
-[![Code Contributors](https://contrib.rocks/image?repo=remarkablemark/html-react-parser)](https://github.com/remarkablemark/html-react-parser/graphs/contributors)
+[![Code Contributors](https://opencollective.com/html-react-parser/contributors.svg?width=890&button=false)](https://github.com/remarkablemark/html-react-parser/graphs/contributors)
 
 ### Financial Contributors
 
@@ -678,6 +558,12 @@ Support this project with your organization. Your logo will show up here with a 
 [![Financial Contributors - Organization 8](https://opencollective.com/html-react-parser/organization/8/avatar.svg)](https://opencollective.com/html-react-parser/organization/8/website)
 [![Financial Contributors - Organization 9](https://opencollective.com/html-react-parser/organization/9/avatar.svg)](https://opencollective.com/html-react-parser/organization/9/website)
 
+## Enterprise
+
+Available as part of the Tidelift Subscription.
+
+The maintainers of html-react-parser and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source packages you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact packages you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-html-react-parser?utm_source=npm-html-react-parser&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
+
 ## Support
 
 - [GitHub Sponsors](https://b.remarkabl.org/github-sponsors)
@@ -686,7 +572,7 @@ Support this project with your organization. Your logo will show up here with a 
 - [Patreon](https://b.remarkabl.org/patreon)
 - [Ko-fi](https://b.remarkabl.org/ko-fi)
 - [Liberapay](https://b.remarkabl.org/liberapay)
-- [Teespring](https://b.remarkabl.org/teespring)
+- [Teepsring](https://b.remarkabl.org/teespring)
 
 ## License
 

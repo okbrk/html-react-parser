@@ -1,5 +1,4 @@
-npm run test:ci
-npm run test:esm
-npm run lint:package
-npm run lint:types
-npx lint-staged
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npm run test:ci && npx lint-staged

@@ -23,8 +23,9 @@ To check an item, place an "x" in the box like so: `- [x] Tests`
 
 - [ ] [Conventional Commits](https://www.conventionalcommits.org/)
 - [ ] Tests
-- [ ] [Types](https://arethetypeswrong.github.io/)
 - [ ] Documentation
+- [ ] Types
+- [ ] Request review from @remarkablemark
 
 <!--
 Any other comments? Thank you for contributing!
