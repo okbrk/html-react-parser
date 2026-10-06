@@ -132,6 +132,14 @@ describe('setStyleProp', () => {
     `);
   });
 
+  it('sets props.style with camelCased keys for a simple style string', () => {
+    const props = {};
+    expect(setStyleProp('font-size: 12px; color: blue', props)).toBe(
+      undefined
+    );
+    expect(props).toEqual({ style: { fontSize: '12px', color: 'blue' } });
+  });
+
   it('does not set props.style when style attribute corrupt', () => {
     const style = `font - size: 1em`;
     const props = {};
